@@ -1,0 +1,28 @@
+<tr>
+    <th><img src={{thumb_url}} width="200" height="200"/></th>
+    <td>{{name}}</td>
+    <td>{{description}}</td>
+    <td>
+        <ul>
+            {{#each mechanics}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </td>
+    <td>
+        <ul>
+            {{#each categories}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </td>
+    <td><button data-game-id="{{id}}" data-game-name="{{name}}" class="btn btn-primary" id="AddGameBtn">Add Game</button></td>
+    <td>
+        
+        <form method="post" action= "/groups/{{groupName}}/games">
+            <input type="hidden" value="{{id}}" name="id">
+            <input type="hidden" value="{{name}}" name="name">
+            <input type="submit" class="form-control btn-primary" value="Add Game"></td>
+        </form>
+    </td>
+</tr>

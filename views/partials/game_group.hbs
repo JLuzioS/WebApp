@@ -1,0 +1,20 @@
+<tr>
+    <td><button data-game-id="{{id}}" class="btn btn-danger">Delete</button></td>
+    <td><img src={{img_url}} width="200" height="200"/></td>
+    <td>{{name}}</td>
+    <td>{{description}}</td>
+    <td>
+        <ul>
+            {{#each mechanics}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </td>
+    <td>
+        <ul>
+            {{#each categories}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </td>
+</tr>

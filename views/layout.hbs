@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>BOrga App</title>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="/js/borga-alertPanel.js"></script>
+</head>
+<body>    
+    {{{body}}}
+    <div id="alertPanel"></div>
+     {{#if alert}}
+        <div class="alert alert-{{alert.kind}} alert-dismissible show" role="alert">
+            <strong>{{alert.title}}</strong>
+            {{alert.message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {{/if}}
+</body>
+</html>

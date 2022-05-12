@@ -1,0 +1,608 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "This is web api provides listing games from board games atlas, manage users and groups.",
+    "version": "0.0.1",
+    "title": "BOaRd Games Application (BORGA)"
+  },
+  "paths": {
+    "/api/api-docs": {
+      "get": {
+        "summary": "Get available API endpoints.",
+        "responses": {
+          "200": {
+            "description": "Swagger UI Interface"
+          }
+        }
+      }
+    },
+    "/api/version": {
+      "get": {
+        "summary": "Get API version.",
+        "responses": {
+          "200": {
+            "description": "Retrieves the current version of api",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "put": {
+        "requestBody": {
+          "description": "Receives the object that contains the object user that was added.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Adds a user.",
+        "responses": {
+          "200": {
+            "description": "Retrives the object with the added user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get a list all the groups for the given user.",
+        "responses": {
+          "200": {
+            "description": "Retrives an object containing all the groups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapOfGroups"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No Groups found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Creates a new group.",
+        "summary": "Creates a new group.",
+        "requestBody": {
+          "description": "Receives the object that contains the object user that was added.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retrives an object with the added group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Group already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorHandler"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups/{groupName}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Gets a group given a group name.",
+        "description": "Returns a single group.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupName",
+            "required": true,
+            "description": "Name of the group to get",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrives an object with the group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The object receive was null or undefined.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Edits a group name and description.",
+        "summary": "Edits a group.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupName",
+            "required": true,
+            "description": "Name of the group that will be edited.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Receives the object with the params to be edited",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retrieves an object with the edited group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Group not found."
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Deletes a group.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupName",
+            "required": true,
+            "description": "Name of the group to get",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieves the group just deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid group name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Group name not found."
+          }
+        }
+      }
+    },
+    "/api/groups/{groupName}/games": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupName",
+            "required": true,
+            "description": "Name of the group to add the game",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Adds a game to the group",
+        "requestBody": {
+          "description": "Receives the object that contains the object added to the group.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retrieves the game added to the group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Game already in the group."
+          }
+        }
+      }
+    },
+    "/api/groups/{groupName}/games/{gameId}": {
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupName",
+            "required": true,
+            "description": "Name of the group that will have game removed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "gameId",
+            "required": true,
+            "description": "Id of the game to be removed.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Removes a game from a given group.",
+        "responses": {
+          "200": {
+            "description": "Retrieves the object that contains the removed game.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name received.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForUndefienedOrNull"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Authorization Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAuthorizationHeader"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Game not found in the group."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "VersionResponse": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "MapOfGroups": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Group"
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "Game": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorForUndefienedOrNull": {
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "InvalidAuthorizationHeader": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorHandler": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {}
+  }
+}

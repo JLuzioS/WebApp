@@ -1,0 +1,45 @@
+<script type="text/javascript" src="/js/borga-groups.js"></script>
+
+<div class="form-floating d-flex">
+    {{#user}}
+    <h1>Welcome {{name}}</h1> 
+    <button id="sign-out-btn" data-group-name="{{name}}" class="btn btn-primary">Sign Out</button>
+    {{/user}}
+
+    <form method="post">
+        <legend> Add new Group </legend>
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Group Name" name="name" required>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Group Description" name="description" required>
+            </div>
+            <div class="col">
+                <input type="submit" class="form-control btn-primary" value="Add Group">
+            </div>
+        </div>
+    </form>
+    <table class="table content-table thead tr">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Group</th>
+                <th scope="col">Description</th>
+                <th scope="col">Number Of Games</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each group}}
+            <tr>
+                <td><button data-group-name="{{name}}" class="btn btn-danger">Delete</button></td>
+                <td scope="col">
+                    <a href= "/groups/{{name}}">{{name}}</a>
+                    </td>
+                <td scope="col">{{description}}</td>
+                <td scope="col">{{games.length}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
